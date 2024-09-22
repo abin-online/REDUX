@@ -1,0 +1,1 @@
+var CAKE_ORDERED = 'CAKE_ORDERED';
