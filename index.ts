@@ -1,4 +1,6 @@
-import { bindActionCreators, combineReducers, createStore } from "@reduxjs/toolkit";
+import { bindActionCreators, combineReducers, createStore ,applyMiddleware } from "@reduxjs/toolkit";
+import { createLogger } from 'redux-logger'
+const logger = createLogger()
 
 const CAKE_ORDERED : string = 'CAKE_ORDERED'
 const CAKE_RESTOCK : string = 'CAKE_RESTOCKED'
@@ -95,7 +97,7 @@ const rootReducer = combineReducers({
     iceCream: iceCreamReducer
 })
 
-const store = createStore(rootReducer)
+const store = createStore(rootReducer , applyMiddleware(logger))
 
 const unsubscribe = store.subscribe(():void =>{
     const state = store.getState();
