@@ -14,10 +14,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var toolkit_1 = require("@reduxjs/toolkit");
 var CAKE_ORDERED = 'CAKE_ORDERED';
 var CAKE_RESTOCK = 'CAKE_RESTOCKED';
-function orderCake() {
+var ICECREAM_ORDERED = 'ICECREAM_ORDERED';
+var ICECREAM_RESTOCK = 'ICECREAM_RESTOCK';
+//Action creator for Cake
+function orderCake(qty) {
+    if (qty === void 0) { qty = 1; }
     return {
         type: CAKE_ORDERED,
-        payload: 1
+        payload: qty
     };
 }
 function restockCake(qty) {
@@ -27,32 +31,62 @@ function restockCake(qty) {
         payload: qty
     };
 }
-var initialState = {
-    numOfCakes: 10,
-    anotherProperty: 0
+//Action creator for Ice creams
+function orderIceCream(qty) {
+    if (qty === void 0) { qty = 1; }
+    return {
+        type: ICECREAM_ORDERED,
+        payload: qty
+    };
+}
+function restockIceCream(qty) {
+    if (qty === void 0) { qty = 1; }
+    return {
+        type: ICECREAM_RESTOCK,
+        payload: qty
+    };
+}
+var initialCakeState = {
+    numOfCakes: 10
 };
-var reducer = function (state, action) {
-    if (state === void 0) { state = initialState; }
+var cakeReducer = function (state, action) {
+    if (state === void 0) { state = initialCakeState; }
     switch (action.type) {
         case CAKE_ORDERED:
-            return __assign(__assign({}, state), { numOfCakes: state.numOfCakes - 1 });
+            return __assign(__assign({}, state), { numOfCakes: state.numOfCakes - action.payload });
         case CAKE_RESTOCK:
             return __assign(__assign({}, state), { numOfCakes: state.numOfCakes + action.payload });
         default:
             return state;
     }
 };
-var store = (0, toolkit_1.createStore)(reducer);
-console.log('Initial State ', store.getState())
+var initialIceCreamState = {
+    numOfIceCreams: 10
+};
+var iceCreamReducer = function (state, action) {
+    if (state === void 0) { state = initialIceCreamState; }
+    switch (action.type) {
+        case ICECREAM_ORDERED:
+            return __assign(__assign({}, state), { numOfIceCreams: state.numOfIceCreams - action.payload });
+        case ICECREAM_RESTOCK:
+            return __assign(__assign({}, state), { numOfIceCreams: state.numOfIceCreams + action.payload });
+        default:
+            return state;
+    }
+};
+var rootReducer = (0, toolkit_1.combineReducers)({
+    cake: cakeReducer,
+    iceCream: iceCreamReducer
+});
+var store = (0, toolkit_1.createStore)(rootReducer);
 var unsubscribe = store.subscribe(function () {
     var state = store.getState();
-    console.log('Updated State ', state)
+    console .log('Updated State ', state)
 });
-store.dispatch(orderCake());
-store.dispatch(orderCake());
-store.dispatch({
-    type: CAKE_RESTOCK,
-    payload: 10
-})
-store.dispatch(restockCake(4));
+var actions = (0, toolkit_1.bindActionCreators)({ orderCake: orderCake, restockCake: restockCake, orderIceCream: orderIceCream, restockIceCream: restockIceCream }, store.dispatch);
+actions.orderCake();
+actions.orderCake();
+actions.restockCake(45);
+actions.restockIceCream(40);
+actions.orderIceCream(10);
 unsubscribe();
