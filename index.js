@@ -81,7 +81,6 @@ var rootReducer = (0, toolkit_1.combineReducers)({
 var store = (0, toolkit_1.createStore)(rootReducer);
 var unsubscribe = store.subscribe(function () {
     var state = store.getState();
-    console .log('Updated State ', state)
 });
 var actions = (0, toolkit_1.bindActionCreators)({ orderCake: orderCake, restockCake: restockCake, orderIceCream: orderIceCream, restockIceCream: restockIceCream }, store.dispatch);
 actions.orderCake();
